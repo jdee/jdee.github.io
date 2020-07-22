@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      var scriptTag = document.createElement('script');
+      scriptTag.onload = function() { alert('Script loaded'); };
+      scriptTag.onerror = function(err) { alert('Script load error: ' + err); }
+      scriptTag.async = 1;
+      scriptTag.src = 'https://cdn.branch.io/branch-latest.min.js';
+      var firstScript = document.getElementsByTagName('script')[0];
+      firstScript.parentNode.insertBefore(scriptTag, firstScript);
+    </script>
+  </head>
+  <body>
+    <p>
+      Nothing to see here.
+    </p>
+  </body>
+</html>
