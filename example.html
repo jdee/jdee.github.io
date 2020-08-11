@@ -134,7 +134,7 @@
 
 		var apiRequests = [];
 		$('#user-agent').text(navigator.userAgent);
-		$('#window').text(JSON.stringify(window));
+		$('#window').text(JSON.stringify(window.indexedDB)); // detect WKWebView
 		branch.setAPIResponseCallback(function(url, method, requestBody, error, status, responseBody) {
 			apiRequests.push(url);
 			var requestText = apiRequests.join('\n');
