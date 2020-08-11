@@ -40,8 +40,8 @@
 		</section>
 		<section>
 			<div class="row col-lg-8 col-lg-offset-2">
-				<h4>WebKit</h4>
-				<pre id="webkit"></pre>
+				<h4>window</h4>
+				<pre id="window"></pre>
 		</section>
 		<section>
 			<div class="row col-lg-8 col-lg-offset-2">
@@ -134,7 +134,7 @@
 
 		var apiRequests = [];
 		$('#user-agent').text(navigator.userAgent);
-		$('#webkit').text(JSON.stringify(window.webkit));
+		$('#window').text(JSON.stringify(window));
 		branch.setAPIResponseCallback(function(url, method, requestBody, error, status, responseBody) {
 			apiRequests.push(url);
 			var requestText = apiRequests.join('\n');
