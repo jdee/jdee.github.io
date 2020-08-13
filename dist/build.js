@@ -1151,19 +1151,19 @@ function isSafariBrowser(a) {
   return !!/^((?!chrome|android|crios|fxios).)*safari/i.test(a);
 }
 function isChromeBrowser(a) {
-  return /(chrome|crios)/i.test(a);
+  return !!/(chrome|crios)/i.test(a);
 }
 function isFirefoxBrowser(a) {
-  return /(fxios|firefox)/i.test(a);
+  return !!/(fxios|firefox)/i.test(a);
 }
 function isEdgeBrowser(a) {
-  return /edg/i.test(a);
+  return !!/edg/i.test(a);
 }
 function isOperaBrowser(a) {
-  return /(opt|opera)/i.test(a);
+  return !!/(opt|opera)/i.test(a);
 }
 function isYandexBrowser(a) {
-  return /yabrowser/i.test(a);
+  return !!/yabrowser/i.test(a);
 }
 function isMacintoshDesktop(a) {
   return a && -1 < a.indexOf("Macintosh");
