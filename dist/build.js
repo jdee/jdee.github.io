@@ -1151,7 +1151,19 @@ function isSafariBrowser(a) {
   return !!/^((?!chrome|android|crios|fxios).)*safari/i.test(a);
 }
 function isChromeBrowser(a) {
-  return a && /(chrome|crios)/i.test(a);
+  return /(chrome|crios)/i.test(a);
+}
+function isFirefoxBrowser(a) {
+  return /(fxios|firefox)/i.test(a);
+}
+function isEdgeBrowser(a) {
+  return /edg/i.test(a);
+}
+function isOperaBrowser(a) {
+  return /(opt|opera)/i.test(a);
+}
+function isYandexBrowser(a) {
+  return /yabrowser/i.test(a);
 }
 function isMacintoshDesktop(a) {
   return a && -1 < a.indexOf("Macintosh");
@@ -1188,7 +1200,7 @@ utils.isWebKitBrowser = function() {
 };
 utils.isIOSWKWebView = function() {
   var a = navigator.userAgent;
-  return utils.isWebKitBrowser() && isIOS(a) && !isChromeBrowser(a);
+  return utils.isWebKitBrowser() && isIOS(a) && a && !isChromeBrowser(a) && !isFirefoxBrowser(a) && !isEdgeBrowser(a) && !isOperaBrowser(a) && !isYandexBrowser(a);
 };
 utils.getParamValue = function(a) {
   try {
