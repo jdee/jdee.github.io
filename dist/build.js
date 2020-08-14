@@ -1200,7 +1200,7 @@ utils.isWebKitBrowser = function() {
 };
 utils.isIOSWKWebView = function() {
   var a = navigator.userAgent;
-  return utils.isWebKitBrowser() && isIOS(a) && a && !isChromeBrowser(a) && !isFirefoxBrowser(a) && !isEdgeBrowser(a) && !isOperaBrowser(a) && !isYandexBrowser(a);
+  return utils.isWebKitBrowser() && a && isIOS(a) && !isChromeBrowser(a) && !isFirefoxBrowser(a) && !isEdgeBrowser(a) && !isOperaBrowser(a) && !isYandexBrowser(a);
 };
 utils.getParamValue = function(a) {
   try {
