@@ -1148,7 +1148,7 @@ utils.hashValue = function(a) {
   }
 };
 function isSafariBrowser(a) {
-  return !!/^((?!chrome|android|crios|fxios|edg|yabrowser).)*safari/i.test(a);
+  return !!/^((?!chrome|android|crios|firefox|fxios|edg|yabrowser).)*safari/i.test(a);
 }
 function isChromeBrowser(a) {
   return !!/(chrome|crios)/i.test(a);
