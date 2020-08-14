@@ -1148,7 +1148,7 @@ utils.hashValue = function(a) {
   }
 };
 function isSafariBrowser(a) {
-  return !!/^((?!chrome|android|crios|fxios).)*safari/i.test(a);
+  return !!/^((?!chrome|android|crios|fxios|edg|yabrowser).)*safari/i.test(a);
 }
 function isChromeBrowser(a) {
   return !!/(chrome|crios)/i.test(a);
@@ -1160,7 +1160,7 @@ function isEdgeBrowser(a) {
   return !!/edg/i.test(a);
 }
 function isOperaBrowser(a) {
-  return !!/(opt|opera)/i.test(a);
+  return !!/(opt|opr)/i.test(a);
 }
 function isYandexBrowser(a) {
   return !!/yabrowser/i.test(a);
