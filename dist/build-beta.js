@@ -2723,7 +2723,7 @@ Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c
   utils.userPreferences.trackingDisabled = c && c.tracking_disabled && !0 === c.tracking_disabled ? !0 : !1;
   utils.userPreferences.allowErrorsInCallback = !1;
   utils.userPreferences.trackingDisabled && utils.cleanApplicationAndSessionStorage(d);
-  b = session.get(d._storage);
+  b = session.get(d._storage, !0);
   d.identity_id = b && b.identity_id;
   console.log("Initialized identity_id from storage to " + JSON.stringify(d.identity_id));
   var e = function(a) {
