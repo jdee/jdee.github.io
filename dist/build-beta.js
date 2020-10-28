@@ -2722,6 +2722,7 @@ Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c
   utils.userPreferences.trackingDisabled = c && c.tracking_disabled && !0 === c.tracking_disabled ? !0 : !1;
   utils.userPreferences.allowErrorsInCallback = !1;
   utils.userPreferences.trackingDisabled && utils.cleanApplicationAndSessionStorage(d);
+  d.identity_id = d._storage.get("identity_id");
   var e = function(a) {
     a.link_click_id && (d.link_click_id = a.link_click_id.toString());
     a.session_id && (d.session_id = a.session_id.toString());
