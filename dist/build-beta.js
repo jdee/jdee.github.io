@@ -2689,6 +2689,7 @@ Branch.prototype._api = function(a, b, c) {
   this.app_id && (b.app_id = this.app_id);
   this.branch_key && (b.branch_key = this.branch_key);
   (a.params && a.params.session_id || a.queryPart && a.queryPart.session_id) && this.session_id && (b.session_id = this.session_id);
+  console.log("In _api. identity_id = " + JSON.stringify(a.params ? a.params.identity_id : void 0));
   (a.params && a.params.identity_id || a.queryPart && a.queryPart.identity_id) && this.identity_id && (b.identity_id = this.identity_id);
   0 > a.endpoint.indexOf("/v1/") ? (a.params && a.params.developer_identity || a.queryPart && a.queryPart.developer_identity) && this.identity && (b.developer_identity = this.identity) : (a.params && a.params.identity || a.queryPart && a.queryPart.identity) && this.identity && (b.identity = this.identity);
   (a.params && a.params.link_click_id || a.queryPart && a.queryPart.link_click_id) && this.link_click_id && (b.link_click_id = this.link_click_id);
@@ -2723,10 +2724,11 @@ Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c
   utils.userPreferences.allowErrorsInCallback = !1;
   utils.userPreferences.trackingDisabled && utils.cleanApplicationAndSessionStorage(d);
   d.identity_id = d._storage.get("identity_id");
+  console.log("Initialized identity_id from storage to " + JSON.stringify(d.identity_id));
   var e = function(a) {
     a.link_click_id && (d.link_click_id = a.link_click_id.toString());
     a.session_id && (d.session_id = a.session_id.toString());
-    a.identity_id && (d.identity_id = a.identity_id.toString());
+    a.identity_id && (d.identity_id = a.identity_id.toString(), console.log("Overriding identity_id from data: " + JSON.stringify(d.identity_id)));
     a.identity && (d.identity = a.identity.toString());
     a.link && (d.sessionLink = a.link);
     a.referring_link && (a.referring_link = utils.processReferringLink(a.referring_link));
@@ -2736,6 +2738,7 @@ Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c
   };
   b = session.get(d._storage);
   var f = c && "undefined" !== typeof c.branch_match_id && null !== c.branch_match_id ? c.branch_match_id : null, g = f || utils.getParamValue("_branch_match_id") || utils.hashValue("r"), k = !b || !b.identity_id;
+  console.log("freshInstall: " + JSON.stringify(k));
   d._branchViewEnabled = !!d._storage.get("branch_view_enabled");
   var h = function(a) {
     var b = {sdk:config.version, branch_key:d.branch_key}, c = session.get(d._storage) || {}, e = session.get(d._storage, !0) || {};
@@ -2838,6 +2841,7 @@ Branch.prototype.setIdentity = wrap(callback_params.CALLBACK_ERR_DATA, function(
     d && a(d);
     e = e || {};
     c.identity_id = e.identity_id ? e.identity_id.toString() : null;
+    console.log("Updated self.identity_id after login to " + JSON.stringify(c.identity_id));
     c.sessionLink = e.link;
     c.identity = b;
     e.developer_identity = b;
@@ -2857,6 +2861,7 @@ Branch.prototype.logout = wrap(callback_params.CALLBACK_ERR, function(a) {
     b.identity_id = d.identity_id;
     b.identity = null;
     session.patch(b._storage, d, !0, !0);
+    console.log("Updated identity_id after logout to " + JSON.stringify(b.identity_id));
     a(null);
   });
 });
