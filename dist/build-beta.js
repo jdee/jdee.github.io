@@ -2723,7 +2723,8 @@ Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c
   utils.userPreferences.trackingDisabled = c && c.tracking_disabled && !0 === c.tracking_disabled ? !0 : !1;
   utils.userPreferences.allowErrorsInCallback = !1;
   utils.userPreferences.trackingDisabled && utils.cleanApplicationAndSessionStorage(d);
-  d.identity_id = d._storage.get("identity_id");
+  b = session.get(d._storage);
+  d.identity_id = b && b.identity_id;
   console.log("Initialized identity_id from storage to " + JSON.stringify(d.identity_id));
   var e = function(a) {
     a.link_click_id && (d.link_click_id = a.link_click_id.toString());
