@@ -2766,11 +2766,7 @@ Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c
     }
     var h = utils.getAdditionalMetadata(), m = utils.validateParameterType(c.metadata, "object") ? c.metadata : null;
     m && (m = utils.mergeHostedDeeplinkData(h.hosted_deeplink_data, m)) && 0 < Object.keys(m).length && (h.hosted_deeplink_data = m);
-    console.log("Before pageview");
-    console.log(" options = " + JSON.stringify(c));
-    console.log(" additionalMetadata = " + JSON.stringify(h));
     var n = branch_view._getPageviewRequestData(journeys_utils._getPageviewMetadata(c, h), c, d, !1);
-    console.log("pageview request body: " + JSON.stringify(n));
     d.renderQueue(function() {
       d._api(resources.pageview, n, function(a, b) {
         if (!a && "object" === typeof b) {
