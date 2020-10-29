@@ -934,7 +934,7 @@ goog.json.Serializer.prototype.serializeObject_ = function(a, b) {
   b.push("}");
 };
 // Input 2
-var config = {app_service_endpoint:"https://app.link", link_service_endpoint:"https://bnc.lt", api_endpoint:"https://api2.branch.io", version:"2.56.0"};
+var config = {app_service_endpoint:"https://app.link", link_service_endpoint:"https://bnc.lt", api_endpoint:"https://api2.branch.io", version:"2.56.2"};
 // Input 3
 var safejson = {parse:function(a) {
   a = String(a);
@@ -1522,7 +1522,7 @@ function defaults(a) {
   return utils.merge(a, b);
 }
 resources.open = {destination:config.api_endpoint, endpoint:"/v1/open", method:utils.httpMethod.POST, params:{browser_fingerprint_id:validator(!1, validationTypes.STRING), alternative_browser_fingerprint_id:validator(!1, validationTypes.STRING), identity_id:validator(!1, validationTypes.STRING), link_identifier:validator(!1, validationTypes.STRING), sdk:validator(!1, validationTypes.STRING), options:validator(!1, validationTypes.OBJECT), initial_referrer:validator(!1, validationTypes.STRING), tracking_disabled:validator(!1, 
-validationTypes.BOOLEAN), current_url:validator(!1, validationTypes.STRING), screen_height:validator(!1, validationTypes.NUMBER), screen_width:validator(!1, validationTypes.NUMBER), identity:validator(!1, validationTypes.STRING)}};
+validationTypes.BOOLEAN), current_url:validator(!1, validationTypes.STRING), screen_height:validator(!1, validationTypes.NUMBER), screen_width:validator(!1, validationTypes.NUMBER)}};
 resources._r = {destination:config.app_service_endpoint, endpoint:"/_r", method:utils.httpMethod.GET, jsonp:!0, params:{sdk:validator(!0, validationTypes.STRING), _t:validator(!1, validationTypes.STRING), branch_key:validator(!0, validationTypes.STRING)}};
 resources.linkClick = {destination:"", endpoint:"", method:utils.httpMethod.GET, queryPart:{link_url:validator(!0, validationTypes.STRING)}, params:{click:validator(!0, validationTypes.STRING)}};
 resources.SMSLinkSend = {destination:config.link_service_endpoint, endpoint:"/c", method:utils.httpMethod.POST, queryPart:{link_url:validator(!0, validationTypes.STRING)}, params:{sdk:validator(!1, validationTypes.STRING), phone:validator(!0, validationTypes.STRING)}};
@@ -1685,7 +1685,7 @@ var session = {get:function(a, b) {
   }
 }, patch:function(a, b, c, d) {
   var e = function(a, b) {
-    return utils.encodeBFPs(utils.merge(goog.json.parse(a), b, d));
+    return utils.encodeBFPs(utils.merge(safejson.parse(a), b, d));
   }, f = a.get("branch_session", !1) || {};
   a.set("branch_session", goog.json.serialize(e(f, b)));
   c && (c = a.get("branch_session_first", !0) || {}, a.set("branch_session_first", goog.json.serialize(e(c, b)), !0));
@@ -2481,7 +2481,7 @@ journeys_utils.trySetJourneyUrls = function(a, b) {
     }, a);
   };
   try {
-    var d = JSON.parse(a.data);
+    var d = safejson.parse(a.data);
     a.data = JSON.stringify(c(d));
     return a;
   } catch (e) {
@@ -2586,7 +2586,7 @@ branch_view._getPageviewRequestData = function(a, b, c, d) {
   e.data = utils.merge(utils.getHostedDeepLinkData(), e.data);
   e.data = utils.merge(utils.whiteListJourneysLanguageData(f || {}), e.data);
   c && (e.data.link_click_id = c);
-  (a = f.data ? JSON.parse(f.data) : null) && a["+referrer"] && (e.data["+referrer"] = a["+referrer"]);
+  (a = f.data ? safejson.parse(f.data) : null) && a["+referrer"] && (e.data["+referrer"] = a["+referrer"]);
   return e = utils.cleanLinkData(e);
 };
 // Input 16
@@ -2722,6 +2722,8 @@ Branch.prototype.init = wrap(callback_params.CALLBACK_ERR_DATA, function(a, b, c
   utils.userPreferences.trackingDisabled = c && c.tracking_disabled && !0 === c.tracking_disabled ? !0 : !1;
   utils.userPreferences.allowErrorsInCallback = !1;
   utils.userPreferences.trackingDisabled && utils.cleanApplicationAndSessionStorage(d);
+  b = session.get(d._storage, !0);
+  d.identity_id = b && b.identity_id;
   var e = function(a) {
     a.link_click_id && (d.link_click_id = a.link_click_id.toString());
     a.session_id && (d.session_id = a.session_id.toString());
@@ -2841,7 +2843,7 @@ Branch.prototype.setIdentity = wrap(callback_params.CALLBACK_ERR_DATA, function(
     c.identity = b;
     e.developer_identity = b;
     e.referring_data_parsed = e.referring_data ? safejson.parse(e.referring_data) : null;
-    session.patch(c._storage, {identity:b}, !0);
+    session.patch(c._storage, {identity:b, identity_id:c.identity_id}, !0);
     a(null, e);
   });
 });
