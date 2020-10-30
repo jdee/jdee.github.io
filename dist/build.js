@@ -1045,7 +1045,7 @@ utils.message = function(a, b, c, d) {
   return a;
 };
 utils.whiteListSessionData = function(a) {
-  return {data:a.data || "", data_parsed:a.data_parsed || {}, has_app:utils.getBooleanOrNull(a.has_app), identity:a.identity || null, developer_identity:a.developer_identity || null, referring_identity:a.referring_identity || null, referring_link:a.referring_link || null};
+  return {data:a.data || "", data_parsed:a.data_parsed || {}, has_app:utils.getBooleanOrNull(a.has_app), identity:a.identity || null, developer_identity:a.identity || null, referring_identity:a.referring_identity || null, referring_link:a.referring_link || null};
 };
 utils.whiteListJourneysLanguageData = function(a) {
   var b = /^\$journeys_\S+$/, c = a.data, d = {};
