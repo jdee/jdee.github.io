@@ -80,6 +80,8 @@
 					<button id="track" class="btn btn-info">.track()</button>
 					<button id="link" class="btn btn-info">.link()</button>
 					<button id="banner" class="btn btn-info">.banner()</button>
+					<button id="disable-tracking" class="btn btn-info">.disableTracking(true)</button>
+					<button id="enable-tracking" class="btn btn-info">.disableTracking(false)</button>
 				</div>
 			</div>
 			<div class="row col-lg-8 col-lg-offset-2">
@@ -344,6 +346,18 @@
 				sampleParams // Link data or string of link
 			);
 			response.html('none');
+		});
+		$('#disable-tracking').click(function() {
+			request.text('branch.disableTracking(true);');
+			branch.disableTracking(true, function() {
+				response.text('none');
+			});
+		});
+		$('#enable-tracking').click(function() {
+			request.text('branch.disableTracking(false);');
+			branch.disableTracking(false, function() {
+				response.text('none');
+			});
 		});
 	</script>
 </body>
