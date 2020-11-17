@@ -51,6 +51,18 @@ $jscomp.polyfill("String.prototype.includes", function(a) {
     return -1 !== $jscomp.checkStringArgs(this, a, "includes").indexOf(a, c || 0);
   };
 }, "es6-impl", "es3");
+$jscomp.polyfill("String.prototype.startsWith", function(a) {
+  return a ? a : function(a, c) {
+    var b = $jscomp.checkStringArgs(this, a, "startsWith");
+    a += "";
+    for (var e = b.length, f = a.length, g = Math.max(0, Math.min(c | 0, b.length)), k = 0;k < f && g < e;) {
+      if (b[g++] != a[k++]) {
+        return !1;
+      }
+    }
+    return k >= f;
+  };
+}, "es6-impl", "es3");
 $jscomp.SYMBOL_PREFIX = "jscomp_symbol_";
 $jscomp.initSymbol = function() {
   $jscomp.initSymbol = function() {
@@ -1003,8 +1015,7 @@ utils.userPreferences = {trackingDisabled:!1, whiteListedEndpointsWithData:{"/v1
   }
   c = c.pathname;
   "/" != c[0] && (c = "/" + c);
-  d = c.split("/");
-  if (3 == d.length && "c" === d[1]) {
+  if (c.startsWith("/c/")) {
     return !1;
   }
   c = utils.userPreferences.whiteListedEndpointsWithData[c];
