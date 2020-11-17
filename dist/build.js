@@ -980,7 +980,7 @@ utils.calculateBrtt = function(a) {
   return a && "number" === typeof a ? (Date.now() - a).toString() : null;
 };
 utils.dismissEventToSourceMapping = {didClickJourneyClose:"Button(X)", didClickJourneyContinue:"Dismiss Journey text"};
-utils.userPreferences = {trackingDisabled:!1, whiteListedEndpointsWithData:{"/v1/open":{link_identifier:"\\d+"}, "/v1/pageview":{event:"pageview"}, "/v1/dismiss":{event:"dismiss"}, "/v1/url":{}, "/c":{}}, allowErrorsInCallback:!1, shouldBlockRequest:function(a, b) {
+utils.userPreferences = {trackingDisabled:!1, whiteListedEndpointsWithData:{"/v1/open":{link_identifier:"\\d+"}, "/v1/pageview":{event:"pageview"}, "/v1/dismiss":{event:"dismiss"}, "/v1/url":{}}, allowErrorsInCallback:!1, shouldBlockRequest:function(a, b) {
   var c = document.createElement("a");
   c.href = a;
   if (![config.api_endpoint, config.app_service_endpoint, config.link_service_endpoint].includes(c.origin)) {
@@ -988,6 +988,10 @@ utils.userPreferences = {trackingDisabled:!1, whiteListedEndpointsWithData:{"/v1
   }
   c = c.pathname;
   "/" != c[0] && (c = "/" + c);
+  var d = c.split("/");
+  if (2 == d.length && "c" === d[1]) {
+    return !1;
+  }
   c = utils.userPreferences.whiteListedEndpointsWithData[c];
   if (!c) {
     return !0;
@@ -996,9 +1000,8 @@ utils.userPreferences = {trackingDisabled:!1, whiteListedEndpointsWithData:{"/v1
     if (!b) {
       return !0;
     }
-    for (var d in c) {
-      var e = new RegExp(c[d]);
-      if (!b.hasOwnProperty(d) || !e.test(b[d])) {
+    for (var e in c) {
+      if (d = new RegExp(c[e]), !b.hasOwnProperty(e) || !d.test(b[e])) {
         return !0;
       }
     }
