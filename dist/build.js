@@ -1,5 +1,13 @@
 (function() {// Input 0
-var $jscomp = {scope:{}};
+var $jscomp = {scope:{}, checkStringArgs:function(a, b, c) {
+  if (null == a) {
+    throw new TypeError("The 'this' value for String.prototype." + c + " must not be null or undefined");
+  }
+  if (b instanceof RegExp) {
+    throw new TypeError("First argument to String.prototype." + c + " must not be a regular expression");
+  }
+  return a + "";
+}};
 $jscomp.defineProperty = "function" == typeof Object.defineProperties ? Object.defineProperty : function(a, b, c) {
   if (c.get || c.set) {
     throw new TypeError("ES3 does not support getters and setters.");
@@ -10,6 +18,26 @@ $jscomp.getGlobal = function(a) {
   return "undefined" != typeof window && window === a ? a : "undefined" != typeof global && null != global ? global : a;
 };
 $jscomp.global = $jscomp.getGlobal(this);
+$jscomp.polyfill = function(a, b, c, d) {
+  if (b) {
+    c = $jscomp.global;
+    a = a.split(".");
+    for (d = 0;d < a.length - 1;d++) {
+      var e = a[d];
+      e in c || (c[e] = {});
+      c = c[e];
+    }
+    a = a[a.length - 1];
+    d = c[a];
+    b = b(d);
+    b != d && null != b && $jscomp.defineProperty(c, a, {configurable:!0, writable:!0, value:b});
+  }
+};
+$jscomp.polyfill("String.prototype.includes", function(a) {
+  return a ? a : function(a, c) {
+    return -1 !== $jscomp.checkStringArgs(this, a, "includes").indexOf(a, c || 0);
+  };
+}, "es6-impl", "es3");
 $jscomp.SYMBOL_PREFIX = "jscomp_symbol_";
 $jscomp.initSymbol = function() {
   $jscomp.initSymbol = function() {
@@ -63,35 +91,6 @@ $jscomp.iteratorFromArray = function(a, b) {
   };
   return d;
 };
-$jscomp.polyfill = function(a, b, c, d) {
-  if (b) {
-    c = $jscomp.global;
-    a = a.split(".");
-    for (d = 0;d < a.length - 1;d++) {
-      var e = a[d];
-      e in c || (c[e] = {});
-      c = c[e];
-    }
-    a = a[a.length - 1];
-    d = c[a];
-    b = b(d);
-    b != d && null != b && $jscomp.defineProperty(c, a, {configurable:!0, writable:!0, value:b});
-  }
-};
-$jscomp.checkStringArgs = function(a, b, c) {
-  if (null == a) {
-    throw new TypeError("The 'this' value for String.prototype." + c + " must not be null or undefined");
-  }
-  if (b instanceof RegExp) {
-    throw new TypeError("First argument to String.prototype." + c + " must not be a regular expression");
-  }
-  return a + "";
-};
-$jscomp.polyfill("String.prototype.includes", function(a) {
-  return a ? a : function(a, c) {
-    return -1 !== $jscomp.checkStringArgs(this, a, "includes").indexOf(a, c || 0);
-  };
-}, "es6-impl", "es3");
 $jscomp.polyfill("Number.isFinite", function(a) {
   return a ? a : function(a) {
     return "number" !== typeof a ? !1 : !isNaN(a) && Infinity !== a && -Infinity !== a;
@@ -981,13 +980,15 @@ utils.calculateBrtt = function(a) {
   return a && "number" === typeof a ? (Date.now() - a).toString() : null;
 };
 utils.dismissEventToSourceMapping = {didClickJourneyClose:"Button(X)", didClickJourneyContinue:"Dismiss Journey text"};
-utils.userPreferences = {trackingDisabled:!1, whiteListedEndpointsWithData:{"/v1/open":{link_identifier:"\\d+"}, "/v1/pageview":{event:"pageview"}, "/v1/dismiss":{event:"dismiss"}, "/v1/url":{}, "/c":{}}, allowErrorsInCallback:!1, shouldBlockRequest:function(a, b) {
+utils.userPreferences = {trackingDisabled:!1, whiteListedEndpointsWithData:{"/v1/open":{link_identifier:"\\d+"}, "/v1/pageview":{event:"pageview"}, "/v1/dismiss":{event:"dismiss"}, "/v1/url":{}}, allowErrorsInCallback:!1, shouldBlockRequest:function(a, b) {
   var c = document.createElement("a");
   c.href = a;
+  if (![config.api_endpoint, config.app_service_endpoint, config.link_service_endpoint].includes(c.origin)) {
+    return !1;
+  }
   c = c.pathname;
   "/" != c[0] && (c = "/" + c);
   c = utils.userPreferences.whiteListedEndpointsWithData[c];
-  console.log("endpoint wl for " + a + " (requestData=" + b + "): " + JSON.stringify(c));
   if (!c) {
     return !0;
   }
