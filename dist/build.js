@@ -989,7 +989,7 @@ utils.userPreferences = {trackingDisabled:!1, whiteListedEndpointsWithData:{"/v1
   c = c.pathname;
   "/" != c[0] && (c = "/" + c);
   var d = c.split("/");
-  if (2 == d.length && "c" === d[1]) {
+  if (3 == d.length && "c" === d[1]) {
     return !1;
   }
   c = utils.userPreferences.whiteListedEndpointsWithData[c];
