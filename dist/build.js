@@ -987,6 +987,7 @@ utils.userPreferences = {trackingDisabled:!1, whiteListedEndpointsWithData:{"/v1
   c = c.pathname;
   "/" != c[0] && (c = "/" + c);
   c = utils.userPreferences.whiteListedEndpointsWithData[c];
+  console.log("endpoint wl for " + a + " (requestData=" + b + "): " + JSON.stringify(c));
   if (!c) {
     return !0;
   }
