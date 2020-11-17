@@ -33,6 +33,19 @@ $jscomp.polyfill = function(a, b, c, d) {
     b != d && null != b && $jscomp.defineProperty(c, a, {configurable:!0, writable:!0, value:b});
   }
 };
+$jscomp.polyfill("String.prototype.endsWith", function(a) {
+  return a ? a : function(a, c) {
+    var b = $jscomp.checkStringArgs(this, a, "endsWith");
+    a += "";
+    void 0 === c && (c = b.length);
+    for (var e = Math.max(0, Math.min(c | 0, b.length)), f = a.length;0 < f && 0 < e;) {
+      if (b[--e] != a[--f]) {
+        return !1;
+      }
+    }
+    return 0 >= f;
+  };
+}, "es6-impl", "es3");
 $jscomp.polyfill("String.prototype.includes", function(a) {
   return a ? a : function(a, c) {
     return -1 !== $jscomp.checkStringArgs(this, a, "includes").indexOf(a, c || 0);
@@ -983,12 +996,14 @@ utils.dismissEventToSourceMapping = {didClickJourneyClose:"Button(X)", didClickJ
 utils.userPreferences = {trackingDisabled:!1, whiteListedEndpointsWithData:{"/v1/open":{link_identifier:"\\d+"}, "/v1/pageview":{event:"pageview"}, "/v1/dismiss":{event:"dismiss"}, "/v1/url":{}}, allowErrorsInCallback:!1, shouldBlockRequest:function(a, b) {
   var c = document.createElement("a");
   c.href = a;
-  if (![config.api_endpoint, config.app_service_endpoint, config.link_service_endpoint].includes(c.origin)) {
+  var d = [config.api_endpoint, config.app_service_endpoint, config.link_service_endpoint], e = c.origin;
+  e.endsWith("/") && (e = e.substring(0, e.length - 1));
+  if (!d.includes(e)) {
     return !1;
   }
   c = c.pathname;
   "/" != c[0] && (c = "/" + c);
-  var d = c.split("/");
+  d = c.split("/");
   if (3 == d.length && "c" === d[1]) {
     return !1;
   }
@@ -1000,8 +1015,8 @@ utils.userPreferences = {trackingDisabled:!1, whiteListedEndpointsWithData:{"/v1
     if (!b) {
       return !0;
     }
-    for (var e in c) {
-      if (d = new RegExp(c[e]), !b.hasOwnProperty(e) || !d.test(b[e])) {
+    for (var f in c) {
+      if (d = new RegExp(c[f]), !b.hasOwnProperty(f) || !d.test(b[f])) {
         return !0;
       }
     }
